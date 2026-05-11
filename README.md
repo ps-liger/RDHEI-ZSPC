@@ -1,4 +1,4 @@
-# High-Capacity Reversible Data Hiding in Encrypted Images Based on Pixel Prediction and Zero-Subblock Pattern Coding
+# High-capacity reversible data hiding in encrypted images via hierarchical zero-support modeling and zero-subblock pattern coding
 
 ## Project Overview
 
