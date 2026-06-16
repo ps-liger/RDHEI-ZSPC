@@ -1,4 +1,4 @@
-# High-capacity reversible data hiding in encrypted images via hierarchical zero-support modeling and zero-subblock pattern coding
+# Hierarchical Zero-Support Modeling for High-Capacity Reversible Data Hiding in Encrypted Images
 
 ## Project Overview
 
