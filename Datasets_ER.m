@@ -2,7 +2,7 @@ clear;
 clc;
 rng(0,'twister');
 
-root_dir = 'D:\code\my_idea\16-HBVLC-and-Block-Rearrangement-main\Testimages';
+root_dir = '\Testimages';
 
 dataset_names = {'Bossbase', 'Bows-2', 'UCID'};
 dataset_exts  = {'*.pgm', '*.bmp', '*.tif'};
@@ -59,11 +59,11 @@ t = toc;
     max_ER(d) = max(valid_ER);
     min_ER(d) = min(valid_ER);
 
-    fprintf('%s 有效图像数: %d / %d\n', dataset_names{d}, length(valid_ER), cur_num);
-    fprintf('平均嵌入率: %.6f bpp\n', avg_ER(d));
-    fprintf('最大嵌入率: %.6f bpp\n', max_ER(d));
-    fprintf('最小嵌入率: %.6f bpp\n', min_ER(d));
-    fprintf('运行时间: %.2f s\n', t);
+    fprintf('%s Valid images: %d / %d\n', dataset_names{d}, length(valid_ER), cur_num);
+    fprintf('Average embedding rate: %.6f bpp\n', avg_ER(d));
+    fprintf('Max embedding rate: %.6f bpp\n', max_ER(d));
+    fprintf('Min embedding rate: %.6f bpp\n', min_ER(d));
+    fprintf('Runtime: %.2f s\n', t);
 end
 
 ResultTable = table(dataset_names(:), avg_ER, max_ER, min_ER, ...
@@ -78,7 +78,7 @@ function ER = calc_ER_only(img_path, block_size, Data, num)
 
     I = imread(img_path);
 
-    % UCID 是彩图，转灰度；灰度图不变
+    % UCID dataset contains color images, convert to grayscale; grayscale images remain unchanged
     if ndims(I) == 3
         I = rgb2gray(I);
     end
@@ -109,7 +109,7 @@ function ER = calc_ER_only(img_path, block_size, Data, num)
     case_id_all = {case_id1,case_id2,case_id3,case_id4,...
                    case_id5,case_id6,case_id7,case_id8};
 
-    %% 计算 tag_NUB 压缩长度
+    %% Calculate compressed length of tag_NUB
     compress_tagNUB_len = zeros(1,8);
 
     for bp = 1:8
@@ -121,21 +121,21 @@ function ER = calc_ER_only(img_path, block_size, Data, num)
         end
     end
 
-    %% 生成处理后图像
+    %% Generate processed image
     Process_I = eight_to_one( ...
         Second_pro_bitplane1,Second_pro_bitplane2,Second_pro_bitplane3,Second_pro_bitplane4, ...
         Second_pro_bitplane5,Second_pro_bitplane6,Second_pro_bitplane7,Second_pro_bitplane8);
 
-    %% 加密
+    %% Encryption
     Encrypt_I = Encrypt_image(Process_I, 1, data_start, f, tag_preprocess, block_size);
 
-    %% 只计算 UB 区可嵌入数据量
+    %% Calculate embeddable data in UB regions only
     [~, num_emubD, ~, ...
      Stego_bitplane1,Stego_bitplane2,Stego_bitplane3,Stego_bitplane4, ...
      Stego_bitplane5,Stego_bitplane6,Stego_bitplane7,Stego_bitplane8] = ...
         Embed_data(Encrypt_I, block_size, Data, num, tag_preprocess, data_start, f);
 
-    %% 只计算 NUB 区可嵌入数据量
+    %% Calculate embeddable data in NUB regions only
     Stego_all = {Stego_bitplane1,Stego_bitplane2,Stego_bitplane3,Stego_bitplane4,...
                  Stego_bitplane5,Stego_bitplane6,Stego_bitplane7,Stego_bitplane8};
 
@@ -150,7 +150,7 @@ function ER = calc_ER_only(img_path, block_size, Data, num)
 
     num_NUBD = emnub_t - num_emubD;
 
-    %% 嵌入率
+    %% Embedding rate
     ER = (num_emubD + num_NUBD ...
         - length(compress_predict) ...
         - 8 ...
