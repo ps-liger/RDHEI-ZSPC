@@ -1,32 +1,32 @@
 function case_ids = HuffNUBdecode(huffman_stream, num_nub_embeddable)
-% HuffNUBdecode - 使用固定哈夫曼码表从比特流中解码情形编号序列
+% HuffNUBdecode - Decode case ID sequence from bitstream using fixed Huffman code table
 %
-% 固定编码表（与 HuffNUBencode 完全一致）：
-%   情形  1 → 00      情形  2 → 01
-%   情形  3 → 100     情形  4 → 101
-%   情形  5 → 1100    情形  6 → 1101
-%   情形  7 → 11100   情形  8 → 11101
-%   情形  9 → 11110   情形 10 → 11111
+% Fixed code table (identical to HuffNUBencode):
+%   Case  1 → 00      Case  2 → 01
+%   Case  3 → 100     Case  4 → 101
+%   Case  5 → 1100    Case  6 → 1101
+%   Case  7 → 11100   Case  8 → 11101
+%   Case  9 → 11110   Case 10 → 11111
 %
-% 输入：
-%   huffman_stream     — 哈夫曼编码比特流（0/1行向量）
-%   num_nub_embeddable — 待解码的可嵌入NUB数量
+% Input:
+%   huffman_stream     - Huffman encoded bitstream (0/1 row vector)
+%   num_nub_embeddable - number of embeddable NUBs to decode
 %
-% 输出：
-%   case_ids — 情形编号序列（值域1~10）
+% Output:
+%   case_ids - case ID sequence (range 1~10)
 
-% ---- 固定哈夫曼码表 ----
+% ---- Fixed Huffman Code Table ----
 FIXED_CODES = {
-    [0,0],          ...  % 情形 1 : 00
-    [0,1],          ...  % 情形 2 : 01
-    [1,0,0],        ...  % 情形 3 : 100
-    [1,0,1],        ...  % 情形 4 : 101
-    [1,1,0,0],      ...  % 情形 5 : 1100
-    [1,1,0,1],      ...  % 情形 6 : 1101
-    [1,1,1,0,0],    ...  % 情形 7 : 11100
-    [1,1,1,0,1],    ...  % 情形 8 : 11101
-    [1,1,1,1,0],    ...  % 情形 9 : 11110
-    [1,1,1,1,1]     ...  % 情形10 : 11111
+    [0,0],          ...  % Case  1 : 00
+    [0,1],          ...  % Case  2 : 01
+    [1,0,0],        ...  % Case  3 : 100
+    [1,0,1],        ...  % Case  4 : 101
+    [1,1,0,0],      ...  % Case  5 : 1100
+    [1,1,0,1],      ...  % Case  6 : 1101
+    [1,1,1,0,0],    ...  % Case  7 : 11100
+    [1,1,1,0,1],    ...  % Case  8 : 11101
+    [1,1,1,1,0],    ...  % Case  9 : 11110
+    [1,1,1,1,1]     ...  % Case 10 : 11111
 };
 
 case_ids = zeros(1, num_nub_embeddable);
@@ -48,7 +48,7 @@ for i = 1 : num_nub_embeddable
         end
     end
     if ~found
-        error('第%d个符号解码失败，请检查哈夫曼流是否完整。', i);
+        error('Decoding failed for symbol %d. Please check if Huffman stream is complete.', i);
     end
 end
 end
